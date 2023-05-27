@@ -166,7 +166,7 @@ interface Ethernet1/2
   ip router ospf UNDERLAY area 0.0.0.0
   no shutdown
 ```
-### Проверка работоспособности OSPF в сети. Проверяем соседство, таблицу марщрутизации и LSDB:
+### Проверка работоспособности OSPF в сети. Проверяем соседство, таблицу маршрутизации и LSDB:
 
 <details>
 <summary>Проверка на SPINE1</summary>

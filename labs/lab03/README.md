@@ -27,7 +27,7 @@
 |LEAF 3|Ethernet 1/6|172.16.3.1|255.255.255.0|
 |LEAF 3|Ethernet 1/7|172.16.4.1|255.255.255.0|
 
-#### <u>Сети, анонсируемые в OSPF:</u>
+#### <u>Сети, анонсируемые в IS-IS:</u>
 
 |Device|Loopback 0|Network Entity Title|Network|Subnet Mask|
 |:-:|:-:|:-:|:-:|:-:|

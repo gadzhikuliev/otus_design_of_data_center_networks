@@ -10,6 +10,7 @@
 - включить на устройствах протокол BFD
 - настроить на устройствах интерфейсы Loopback 0
 - включить протокол BGP и настроить его, Router ID назначить, основываясь на IP-адресе интерфейса Loopback 0
+- включить ECMP, можно установить в значении 4
 - анонсировать в BGP IP-адреса Loopback 0
 
 ### Физическая схема сети:
@@ -51,9 +52,9 @@ feature bfd
 router bgp 65001
   router-id 172.31.10.10
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.10.10/32
+    maximum-paths 4
   neighbor 10.0.0.1
     bfd
     remote-as 65002
@@ -74,9 +75,9 @@ feature bfd
 router bgp 65001
   router-id 172.31.20.20
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.20.20/32
+    maximum-paths 4
   neighbor 10.0.0.5
     bfd
     remote-as 65002
@@ -97,9 +98,9 @@ feature bfd
 router bgp 65002
   router-id 172.31.30.30
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.30.30/32
+    maximum-paths 4
   neighbor 10.0.0.2
     bfd
     remote-as 65001
@@ -116,9 +117,9 @@ feature bfd
 router bgp 65003
   router-id 172.31.40.40
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.40.40/32
+    maximum-paths 4
   neighbor 10.0.0.10
     bfd
     remote-as 65001
@@ -135,9 +136,9 @@ feature bfd
 router bgp 65004
   router-id 172.31.50.50
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.50.50/32
+    maximum-paths 4
   neighbor 10.0.0.18
     bfd
     remote-as 65001

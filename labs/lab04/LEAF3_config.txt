@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sat Jun 17 18:48:31 2023
-!Time: Sat Jun 17 18:48:33 2023
+!Running configuration last done at: Sat Jul  1 23:02:47 2023
+!Time: Sat Jul  1 23:02:49 2023
 
 version 9.3(10) Bios:version  
 hostname LEAF3
@@ -183,9 +183,9 @@ line vty
 router bgp 65004
   router-id 172.31.50.50
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.50.50/32
+    maximum-paths 4
   neighbor 10.0.0.18
     bfd
     remote-as 65001

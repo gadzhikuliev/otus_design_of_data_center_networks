@@ -1,7 +1,6 @@
-
 !Command: show running-config
-!Running configuration last done at: Sat Jun 17 18:47:48 2023
-!Time: Sat Jun 17 18:47:50 2023
+!Running configuration last done at: Sat Jul  1 21:47:57 2023
+!Time: Sat Jul  1 21:47:58 2023
 
 version 9.3(10) Bios:version  
 hostname SPINE1
@@ -181,9 +180,9 @@ line vty
 router bgp 65001
   router-id 172.31.10.10
   bestpath as-path multipath-relax
-  maxas-limit 4
   address-family ipv4 unicast
     network 172.31.10.10/32
+    maximum-paths 4
   neighbor 10.0.0.1
     bfd
     remote-as 65002

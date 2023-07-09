@@ -3,4 +3,4 @@
 - [Lab02: Построение Underlay сети (OSPF)](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab02)
 - [Lab03: Построение Underlay сети (IS-IS)](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab03)
 - [Lab04: Построение Underlay сети (eBGP)](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab04)
-- [Lab04: VxLAN. EVPN L2](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab05)
+- [Lab05: VxLAN. EVPN L2](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab05)

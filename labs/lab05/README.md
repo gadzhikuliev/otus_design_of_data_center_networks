@@ -7,7 +7,7 @@
 - В качестве Underlay-сети для IP-связанности будем использовать eBGP. Настройка eBGP проводилась в [предыдущей](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab04) лабораторной работе.
 - Настроить eBGP peering в Address Family L2VPN EVPN, указать BGP-соседство с IP-адресами Loopback 0 соседних устройств
 - Выбрать VNI и VLAN ID. Создать VLAN и связать его с VNI.
-- Создать интерфейс VxLAN на LEAF - NVE
+- Создать и настроить интерфейсы VxLAN на всех LEAF-коммутаторах - NVE
 - Выполнить проверку работы EVPN и VxLAN на всех устройствах
 
 

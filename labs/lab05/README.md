@@ -392,7 +392,7 @@ Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 
 SPINE2# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 11, Local Router ID is 172.31.20.20
+BGP table version is 12, Local Router ID is 172.31.20.20
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-i
 njected
@@ -405,14 +405,12 @@ Route Distinguisher: 172.31.30.30:10000
                       1.1.1.1                                        0 65002 i
 
 Route Distinguisher: 172.31.40.40:10000
-*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
-                      2.2.2.2                                        0 65003 i
 *>e[3]:[0]:[32]:[2.2.2.2]/88
                       2.2.2.2                                        0 65003 i
 
 Route Distinguisher: 172.31.50.50:10000
 *>e[3]:[0]:[32]:[3.3.3.3]/88
-                      3.3.3.3                                        0 65004 i	  
+                      3.3.3.3                                        0 65004 i  
 ```
 </details>
 <details>

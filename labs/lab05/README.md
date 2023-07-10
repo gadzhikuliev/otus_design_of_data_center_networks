@@ -45,7 +45,7 @@
 
 #### <u>Адреса интерфейсов Loopback 1, используемые в NVE на LEAF-коммутаторах:</u>
 
-|Device|Loopback 0|Subnet Mask|
+|Device|Loopback 1|Subnet Mask|
 |:-:|:-:|:-:|
 |LEAF1|1.1.1.1|255.255.255.255|
 |LEAF2|2.2.2.2|255.255.255.255|

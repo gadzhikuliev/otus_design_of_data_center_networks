@@ -58,7 +58,6 @@
 nv overlay evpn
 feature bgp
 feature bfd
-feature nv overlay
 
 router bgp 65001
   router-id 172.31.10.10
@@ -104,7 +103,6 @@ router bgp 65001
 nv overlay evpn
 feature bgp
 feature bfd
-feature nv overlay
 
 router bgp 65001
   router-id 172.31.20.20

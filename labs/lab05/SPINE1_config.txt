@@ -17,7 +17,6 @@ vdc SPINE1 id 1
 nv overlay evpn
 feature bgp
 feature bfd
-feature nv overlay
 
 no password strength-check
 username admin password 5 $5$CFNCMC$ySByj95vrL60T7a/FYTulTt1VHd0Nu9//SsdSTfw0OC  role network-admin

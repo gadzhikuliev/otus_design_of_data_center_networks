@@ -419,6 +419,7 @@ Route Distinguisher: 172.31.40.40:10000
 Route Distinguisher: 172.31.50.50:10000
 *>e[3]:[0]:[32]:[3.3.3.3]/88
                       3.3.3.3                                        0 65004 i
+```
 </details>
 <details>
 <summary>Проверка на LEAF1</summary>

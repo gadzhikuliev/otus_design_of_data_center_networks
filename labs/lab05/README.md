@@ -350,7 +350,8 @@ BGP community entries [0/0], BGP clusterlist entries [0/0]
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.31.30.30    4 65002      61      61       16    0    0 00:52:39 1         
 172.31.40.40    4 65003      60      62       16    0    0 00:52:34 1         
-172.31.50.50    4 65004      21      22       16    0    0 00:14:43 1         
+172.31.50.50    4 65004      21      22       16    0    0 00:14:43 1     
+
 SPINE1# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
 BGP table version is 16, Local Router ID is 172.31.10.10
@@ -388,8 +389,7 @@ Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.31.30.30    4 65002      26      23       11    0    0 00:17:31 1         
 172.31.40.40    4 65003      25      24       11    0    0 00:17:29 2         
 172.31.50.50    4 65004      10      10       11    0    0 00:03:16 1         
-SPINE2# 
-SPINE2# 
+
 SPINE2# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
 BGP table version is 11, Local Router ID is 172.31.20.20
@@ -430,7 +430,7 @@ BGP community entries [0/0], BGP clusterlist entries [0/0]
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.31.10.10    4 65001      59      52       25    0    0 00:45:52 3         
 172.31.20.20    4 65001      31      28       25    0    0 00:22:13 3         
-LEAF1# 
+
 LEAF1# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
 BGP table version is 25, Local Router ID is 172.31.30.30
@@ -498,7 +498,7 @@ BGP community entries [0/0], BGP clusterlist entries [0/0]
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.31.10.10    4 65001      65      56       29    0    0 00:49:56 2         
 172.31.20.20    4 65001      36      33       29    0    0 00:26:19 2         
-LEAF2# 
+
 LEAF2# sh bgp l2vpn evpn
 BGP routing table information for VRF default, address family L2VPN EVPN
 BGP table version is 29, Local Router ID is 172.31.40.40
@@ -560,8 +560,7 @@ BGP community entries [0/0], BGP clusterlist entries [0/0]
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.31.10.10    4 65001      17      12       22    0    0 00:06:36 3         
 172.31.20.20    4 65001      17      12       22    0    0 00:06:38 3         
-LEAF3# 
-LEAF3# 
+
 LEAF3# sh bgp l2vpn evpn
 BGP routing table information for VRF default, address family L2VPN EVPN
 BGP table version is 22, Local Router ID is 172.31.50.50

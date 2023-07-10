@@ -354,17 +354,21 @@ Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 
 SPINE1# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 16, Local Router ID is 172.31.10.10
+BGP table version is 18, Local Router ID is 172.31.10.10
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      1.1.1.1                                        0 65002 i
 *>e[3]:[0]:[32]:[1.1.1.1]/88
                       1.1.1.1                                        0 65002 i
 
 Route Distinguisher: 172.31.40.40:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      2.2.2.2                                        0 65003 i
 *>e[3]:[0]:[32]:[2.2.2.2]/88
                       2.2.2.2                                        0 65003 i
 
@@ -392,7 +396,7 @@ Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 
 SPINE2# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 12, Local Router ID is 172.31.20.20
+BGP table version is 14, Local Router ID is 172.31.20.20
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-i
 njected
@@ -401,17 +405,20 @@ est2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      1.1.1.1                                        0 65002 i
 *>e[3]:[0]:[32]:[1.1.1.1]/88
                       1.1.1.1                                        0 65002 i
 
 Route Distinguisher: 172.31.40.40:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      2.2.2.2                                        0 65003 i
 *>e[3]:[0]:[32]:[2.2.2.2]/88
                       2.2.2.2                                        0 65003 i
 
 Route Distinguisher: 172.31.50.50:10000
 *>e[3]:[0]:[32]:[3.3.3.3]/88
-                      3.3.3.3                                        0 65004 i  
-```
+                      3.3.3.3                                        0 65004 i
 </details>
 <details>
 <summary>Проверка на LEAF1</summary>

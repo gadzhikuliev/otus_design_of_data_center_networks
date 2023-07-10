@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sun Jul  9 22:07:23 2023
-!Time: Sun Jul  9 22:07:25 2023
+!Running configuration last done at: Mon Jul 10 12:29:13 2023
+!Time: Mon Jul 10 12:29:15 2023
 
 version 9.3(10) Bios:version  
 hostname LEAF3
@@ -39,7 +39,7 @@ vrf context management
 interface nve1
   no shutdown
   host-reachability protocol bgp
-  source-interface loopback0
+  source-interface loopback1
   member vni 10000
     ingress-replication protocol bgp
 
@@ -60,14 +60,12 @@ interface Ethernet1/4
 interface Ethernet1/5
 
 interface Ethernet1/6
-  no switchport
-  ip address 172.16.3.1/24
-  no shutdown
+  description CLIENT-3
+  switchport access vlan 10
 
 interface Ethernet1/7
-  no switchport
-  ip address 172.16.4.1/24
-  no shutdown
+  description CLIENT-4
+  switchport access vlan 10
 
 interface Ethernet1/8
 
@@ -188,6 +186,9 @@ interface mgmt0
 
 interface loopback0
   ip address 172.31.50.50/32
+
+interface loopback1
+  ip address 3.3.3.3/32
 icam monitor scale
 
 line console
@@ -196,6 +197,7 @@ router bgp 65004
   router-id 172.31.50.50
   bestpath as-path multipath-relax
   address-family ipv4 unicast
+    network 3.3.3.3/32
     network 172.31.50.50/32
     maximum-paths 4
   address-family l2vpn evpn
@@ -224,8 +226,8 @@ router bgp 65004
 evpn
   vni 10000 l2
     rd 172.31.50.50:10000
-    route-target import 172.31.50.50:10000
-    route-target export 172.31.50.50:10000
+    route-target import 172.31.30.30:10000
+    route-target export 172.31.30.30:10000
 
 
 !

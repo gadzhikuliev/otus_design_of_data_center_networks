@@ -1,6 +1,6 @@
 !Command: show running-config
-!Running configuration last done at: Sun Jul  9 22:07:04 2023
-!Time: Sun Jul  9 22:07:06 2023
+!Running configuration last done at: Mon Jul 10 12:29:00 2023
+!Time: Mon Jul 10 12:29:01 2023
 
 version 9.3(10) Bios:version  
 hostname LEAF1
@@ -39,7 +39,7 @@ vrf context management
 interface nve1
   no shutdown
   host-reachability protocol bgp
-  source-interface loopback0
+  source-interface loopback1
   member vni 10000
     ingress-replication protocol bgp
 
@@ -62,9 +62,8 @@ interface Ethernet1/5
 interface Ethernet1/6
 
 interface Ethernet1/7
-  no switchport
-  ip address 172.16.1.1/24
-  no shutdown
+  description CLIENT-1
+  switchport access vlan 10
 
 interface Ethernet1/8
 
@@ -185,6 +184,9 @@ interface mgmt0
 
 interface loopback0
   ip address 172.31.30.30/32
+
+interface loopback1
+  ip address 1.1.1.1/32
 icam monitor scale
 
 line console
@@ -193,6 +195,7 @@ router bgp 65002
   router-id 172.31.30.30
   bestpath as-path multipath-relax
   address-family ipv4 unicast
+    network 1.1.1.1/32
     network 172.31.30.30/32
     maximum-paths 4
   address-family l2vpn evpn

@@ -7,7 +7,9 @@
 - В качестве Underlay-сети для IP-связанности будем использовать eBGP. Настройка eBGP проводилась в [предыдущей](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab04) лабораторной работе
 - Настроить eBGP peering в Address Family L2VPN EVPN, указать BGP-соседство с IP-адресами Loopback 0 соседних устройств
 - Выбрать VNI и VLAN ID. Создать VLAN и связать его с VNI на всех LEAF-коммутаторах
+- Создать интерфейсы Loopback 1 на LEAF-коммутаторах и задать им IP-адреса
 - Создать и настроить интерфейсы VxLAN на всех LEAF-коммутаторах - NVE
+- Прописать VLAN на физических интерфейсах в Access Mode, к которым подключеные клиентские устройства
 - Выполнить проверку работы EVPN и VxLAN на всех устройствах
 
 
@@ -40,6 +42,14 @@
 |LEAF1|172.31.30.30|255.255.255.255|
 |LEAF2|172.31.40.40|255.255.255.255|
 |LEAF3|172.31.50.50|255.255.255.255|
+
+#### <u>Адреса интерфейсов Loopback 1, используемые в NVE на LEAF-коммутаторах:</u>
+
+|Device|Loopback 0|Subnet Mask|
+|:-:|:-:|:-:|
+|LEAF1|1.1.1.1|255.255.255.255|
+|LEAF2|2.2.2.2|255.255.255.255|
+|LEAF3|3.3.3.3|255.255.255.255|
 
 ### Необходимые настройки на оборудовании:
 
@@ -151,14 +161,19 @@ vlan 10
 interface nve1
   no shutdown
   host-reachability protocol bgp
-  source-interface loopback0
+  source-interface loopback1
   member vni 10000
     ingress-replication protocol bgp
+
+interface Ethernet1/7
+  description CLIENT-1
+  switchport access vlan 10
 
 router bgp 65002
   router-id 172.31.30.30
   bestpath as-path multipath-relax
   address-family ipv4 unicast
+    network 1.1.1.1/32
     network 172.31.30.30/32
     maximum-paths 4
   address-family l2vpn evpn
@@ -204,14 +219,19 @@ vlan 10
 interface nve1
   no shutdown
   host-reachability protocol bgp
-  source-interface loopback0
+  source-interface loopback1
   member vni 10000
     ingress-replication protocol bgp
+
+interface Ethernet1/7
+  description CLIENT-2
+  switchport access vlan 10
 
 router bgp 65003
   router-id 172.31.40.40
   bestpath as-path multipath-relax
   address-family ipv4 unicast
+    network 2.2.2.2/32
     network 172.31.40.40/32
     maximum-paths 4
   address-family l2vpn evpn
@@ -239,7 +259,7 @@ router bgp 65003
     inherit peer SPINE-L2VPN
 evpn
   vni 10000 l2
-    rd 172.31.30.30:10000
+    rd 172.31.40.40:10000
     route-target import 172.31.30.30:10000
     route-target export 172.31.30.30:10000
 ```
@@ -257,14 +277,23 @@ vlan 10
 interface nve1
   no shutdown
   host-reachability protocol bgp
-  source-interface loopback0
+  source-interface loopback1
   member vni 10000
     ingress-replication protocol bgp
+
+interface Ethernet1/6
+  description CLIENT-3
+  switchport access vlan 10
+
+interface Ethernet1/7
+  description CLIENT-4
+  switchport access vlan 10
 
 router bgp 65004
   router-id 172.31.50.50
   bestpath as-path multipath-relax
   address-family ipv4 unicast
+    network 3.3.3.3/32
     network 172.31.50.50/32
     maximum-paths 4
   address-family l2vpn evpn
@@ -293,8 +322,8 @@ router bgp 65004
 evpn
   vni 10000 l2
     rd 172.31.50.50:10000
-    route-target import 172.31.50.50:10000
-    route-target export 172.31.50.50:10000
+    route-target import 172.31.30.30:10000
+    route-target export 172.31.30.30:10000
 ```
 ### Проверка работоспособности EVPN / VxLAN. Проверяем соседство по L2VPN между устройствами и таблицу маршрутизации Route Distinguisher. На LEAF-коммутаторах проверяем также NVE Peers:
 
@@ -305,33 +334,43 @@ evpn
 SPINE1# sh bgp l2vpn evpn summary 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 172.31.10.10, local AS number 65001
-BGP table version is 10, L2VPN EVPN config peers 3, capable peers 3
-3 network entries and 3 paths using 732 bytes of memory
-BGP attribute entries [3/516], BGP AS path entries [3/18]
+BGP table version is 37, L2VPN EVPN config peers 3, capable peers 3
+7 network entries and 7 paths using 1708 bytes of memory
+BGP attribute entries [6/1032], BGP AS path entries [3/18]
 BGP community entries [0/0], BGP clusterlist entries [0/0]
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.31.30.30    4 65002      31      29       10    0    0 00:24:00 1         
-172.31.40.40    4 65003      31      29       10    0    0 00:23:58 1         
-172.31.50.50    4 65004      32      32       10    0    0 00:23:58 1  
+172.31.30.30    4 65002      59      52       37    0    0 00:47:10 2         
+172.31.40.40    4 65003      57      52       37    0    0 00:47:10 2         
+172.31.50.50    4 65004      59      51       37    0    0 00:47:13 3 
 
-SPINE1# sh bgp l2vpn evpn 
+SPINE1# sh bgp l2vpn evpn
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 10, Local Router ID is 172.31.10.10
+BGP table version is 37, Local Router ID is 172.31.10.10
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000
-*>e[3]:[0]:[32]:[172.31.30.30]/88
-                      172.31.30.30                                   0 65002 i
-*>e[3]:[0]:[32]:[172.31.40.40]/88
-                      172.31.40.40                                   0 65003 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      1.1.1.1                                        0 65002 i
+*>e[3]:[0]:[32]:[1.1.1.1]/88
+                      1.1.1.1                                        0 65002 i
+
+Route Distinguisher: 172.31.40.40:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      2.2.2.2                                        0 65003 i
+*>e[3]:[0]:[32]:[2.2.2.2]/88
+                      2.2.2.2                                        0 65003 i
 
 Route Distinguisher: 172.31.50.50:10000
-*>e[3]:[0]:[32]:[172.31.50.50]/88
-                      172.31.50.50                                   0 65004 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      3.3.3.3                                        0 65004 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
+                      3.3.3.3                                        0 65004 i
+*>e[3]:[0]:[32]:[3.3.3.3]/88
+                      3.3.3.3                                        0 65004 i
 ```
 </details>
 <details>
@@ -341,33 +380,43 @@ Route Distinguisher: 172.31.50.50:10000
 SPINE2# sh bgp l2vpn evpn summary 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 172.31.20.20, local AS number 65001
-BGP table version is 16, L2VPN EVPN config peers 3, capable peers 3
-3 network entries and 3 paths using 732 bytes of memory
-BGP attribute entries [3/516], BGP AS path entries [3/18]
+BGP table version is 12, L2VPN EVPN config peers 3, capable peers 3
+7 network entries and 7 paths using 1708 bytes of memory
+BGP attribute entries [6/1032], BGP AS path entries [3/18]
 BGP community entries [0/0], BGP clusterlist entries [0/0]
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.31.30.30    4 65002      40      42       16    0    0 00:33:57 1         
-172.31.40.40    4 65003      39      41       16    0    0 00:32:21 1         
-172.31.50.50    4 65004      42      45       16    0    0 00:33:56 1    
+172.31.30.30    4 65002      32      30       12    0    0 00:24:50 2         
+172.31.40.40    4 65003      32      30       12    0    0 00:24:49 2         
+172.31.50.50    4 65004      33      30       12    0    0 00:24:54 3 
 
 SPINE2# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 16, Local Router ID is 172.31.20.20
+BGP table version is 12, Local Router ID is 172.31.20.20
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000
-*>e[3]:[0]:[32]:[172.31.30.30]/88
-                      172.31.30.30                                   0 65002 i
-*>e[3]:[0]:[32]:[172.31.40.40]/88
-                      172.31.40.40                                   0 65003 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      1.1.1.1                                        0 65002 i
+*>e[3]:[0]:[32]:[1.1.1.1]/88
+                      1.1.1.1                                        0 65002 i
+
+Route Distinguisher: 172.31.40.40:10000
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      2.2.2.2                                        0 65003 i
+*>e[3]:[0]:[32]:[2.2.2.2]/88
+                      2.2.2.2                                        0 65003 i
 
 Route Distinguisher: 172.31.50.50:10000
-*>e[3]:[0]:[32]:[172.31.50.50]/88
-                      172.31.50.50                                   0 65004 i				  
+*>e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      3.3.3.3                                        0 65004 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
+                      3.3.3.3                                        0 65004 i
+*>e[3]:[0]:[32]:[3.3.3.3]/88
+                      3.3.3.3                                        0 65004 i			  
 ```
 </details>
 <details>
@@ -377,39 +426,65 @@ Route Distinguisher: 172.31.50.50:10000
 LEAF1# sh bgp l2vpn evpn summary 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 172.31.30.30, local AS number 65002
-BGP table version is 17, L2VPN EVPN config peers 2, capable peers 2
-3 network entries and 5 paths using 972 bytes of memory
-BGP attribute entries [3/516], BGP AS path entries [2/20]
+BGP table version is 44, L2VPN EVPN config peers 2, capable peers 2
+12 network entries and 17 paths using 2928 bytes of memory
+BGP attribute entries [9/1548], BGP AS path entries [2/20]
 BGP community entries [0/0], BGP clusterlist entries [0/0]
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.31.10.10    4 65001      33      72       17    0    0 00:25:13 2         
-172.31.20.20    4 65001      49      73       17    0    0 00:34:50 2  
+172.31.10.10    4 65001      59      55       44    0    0 00:48:54 5         
+172.31.20.20    4 65001      36      31       44    0    0 00:25:45 5   
 
 LEAF1# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 17, Local Router ID is 172.31.30.30
+BGP table version is 44, Local Router ID is 172.31.30.30
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000    (L2VNI 10000)
-*>l[3]:[0]:[32]:[172.31.30.30]/88
-                      172.31.30.30                      100      32768 i
-* e[3]:[0]:[32]:[172.31.40.40]/88
+*>l[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      1.1.1.1                           100      32768 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
                       172.31.10.10                                   0 65001 65003 i
-*>e                   172.31.20.20                                   0 65001 65003 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      172.31.10.10                                   0 65001 65004 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65004 i
+*>l[3]:[0]:[32]:[1.1.1.1]/88
+                      1.1.1.1                           100      32768 i
+*>e[3]:[0]:[32]:[2.2.2.2]/88
+                      172.31.10.10                                   0 65001 65003 i
+*>e[3]:[0]:[32]:[3.3.3.3]/88
+                      172.31.10.10                                   0 65001 65004 i
+
+Route Distinguisher: 172.31.40.40:10000
+* e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65003 i
+*>e                   172.31.10.10                                   0 65001 65003 i
+* e[3]:[0]:[32]:[2.2.2.2]/88
+                      172.31.20.20                                   0 65001 65003 i
+*>e                   172.31.10.10                                   0 65001 65003 i
 
 Route Distinguisher: 172.31.50.50:10000
-* e[3]:[0]:[32]:[172.31.50.50]/88
+* e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65004 i
+*>e                   172.31.10.10                                   0 65001 65004 i
+* e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
                       172.31.10.10                                   0 65001 65004 i
 *>e                   172.31.20.20                                   0 65001 65004 i
+* e[3]:[0]:[32]:[3.3.3.3]/88
+                      172.31.20.20                                   0 65001 65004 i
+*>e                   172.31.10.10                                   0 65001 65004 i
 
 LEAF1# sh nve peers 
 Interface Peer-IP                                 State LearnType Uptime   Router-Mac       
 --------- --------------------------------------  ----- --------- -------- -----------------
-nve1      172.31.40.40                            Up    CP        00:34:43 n/a              
+nve1      2.2.2.2                                 Up    CP        00:30:12 n/a              
+nve1      3.3.3.3                                 Up    CP        00:30:12 n/a              
+nve1      172.31.10.10                            Up    CP        00:30:12 n/a              
+nve1      172.31.20.20                            Up    CP        00:23:26 n/a       
 ```
 </details>
 <details>
@@ -419,39 +494,65 @@ nve1      172.31.40.40                            Up    CP        00:34:43 n/a
 LEAF2# sh bgp l2vpn evpn summary 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 172.31.40.40, local AS number 65003
-BGP table version is 15, L2VPN EVPN config peers 2, capable peers 2
-3 network entries and 5 paths using 972 bytes of memory
-BGP attribute entries [3/516], BGP AS path entries [2/20]
+BGP table version is 47, L2VPN EVPN config peers 2, capable peers 2
+12 network entries and 17 paths using 2928 bytes of memory
+BGP attribute entries [9/1548], BGP AS path entries [2/20]
 BGP community entries [0/0], BGP clusterlist entries [0/0]
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.31.10.10    4 65001      36      42       15    0    0 00:28:47 2         
-172.31.20.20    4 65001      52      42       15    0    0 00:36:50 3     
+172.31.10.10    4 65001      65      57       47    0    0 00:50:51 5         
+172.31.20.20    4 65001      38      33       47    0    0 00:27:40 5 
 
 LEAF2# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 15, Local Router ID is 172.31.40.40
+BGP table version is 47, Local Router ID is 172.31.40.40
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
-Route Distinguisher: 172.31.30.30:10000    (L2VNI 10000)
-* e[3]:[0]:[32]:[172.31.30.30]/88
+Route Distinguisher: 172.31.30.30:10000
+* e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65002 i
+*>e                   172.31.10.10                                   0 65001 65002 i
+* e[3]:[0]:[32]:[1.1.1.1]/88
+                      172.31.20.20                                   0 65001 65002 i
+*>e                   172.31.10.10                                   0 65001 65002 i
+
+Route Distinguisher: 172.31.40.40:10000    (L2VNI 10000)
+*>e[2]:[0]:[0]:[48]:[0050.7966.6806]:[0]:[0.0.0.0]/216
                       172.31.10.10                                   0 65001 65002 i
-*>e                   172.31.20.20                                   0 65001 65002 i
-*>l[3]:[0]:[32]:[172.31.40.40]/88
-                      172.31.40.40                      100      32768 i
+*>l[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      2.2.2.2                           100      32768 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      172.31.10.10                                   0 65001 65004 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65004 i
+*>e[3]:[0]:[32]:[1.1.1.1]/88
+                      172.31.10.10                                   0 65001 65002 i
+*>l[3]:[0]:[32]:[2.2.2.2]/88
+                      2.2.2.2                           100      32768 i
+*>e[3]:[0]:[32]:[3.3.3.3]/88
+                      172.31.10.10                                   0 65001 65004 i
 
 Route Distinguisher: 172.31.50.50:10000
-* e[3]:[0]:[32]:[172.31.50.50]/88
+* e[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65004 i
+*>e                   172.31.10.10                                   0 65001 65004 i
+* e[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
                       172.31.10.10                                   0 65001 65004 i
 *>e                   172.31.20.20                                   0 65001 65004 i
+* e[3]:[0]:[32]:[3.3.3.3]/88
+                      172.31.20.20                                   0 65001 65004 i
+*>e                   172.31.10.10                                   0 65001 65004 i
 
 LEAF2# sh nve peers 
 Interface Peer-IP                                 State LearnType Uptime   Router-Mac       
 --------- --------------------------------------  ----- --------- -------- -----------------
-nve1      172.31.30.30                            Up    CP        00:30:06 n/a    
+nve1      1.1.1.1                                 Up    CP        00:32:14 n/a              
+nve1      3.3.3.3                                 Up    CP        00:41:17 n/a              
+nve1      172.31.10.10                            Up    CP        00:32:14 n/a              
+nve1      172.31.20.20                            Up    CP        00:25:15 n/a    
 ```
 </details>
 <details>
@@ -461,35 +562,57 @@ nve1      172.31.30.30                            Up    CP        00:30:06 n/a
 LEAF3# sh bgp l2vpn evpn summary 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 172.31.50.50, local AS number 65004
-BGP table version is 26, L2VPN EVPN config peers 2, capable peers 2
-3 network entries and 5 paths using 972 bytes of memory
-BGP attribute entries [3/516], BGP AS path entries [2/20]
+BGP table version is 51, L2VPN EVPN config peers 2, capable peers 2
+10 network entries and 13 paths using 2440 bytes of memory
+BGP attribute entries [7/1204], BGP AS path entries [2/20]
 BGP community entries [0/0], BGP clusterlist entries [0/0]
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.31.10.10    4 65001      44      65       26    0    0 00:29:55 2         
-172.31.20.20    4 65001      61      66       26    0    0 00:39:33 2  
+172.31.10.10    4 65001      65      59       51    0    0 00:52:49 3         
+172.31.20.20    4 65001      40      35       51    0    0 00:29:40 3  
 
 LEAF3# sh bgp l2vpn evpn 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 26, Local Router ID is 172.31.50.50
+BGP table version is 51, Local Router ID is 172.31.50.50
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
 
    Network            Next Hop            Metric     LocPrf     Weight Path
 Route Distinguisher: 172.31.30.30:10000
-* e[3]:[0]:[32]:[172.31.30.30]/88
+* e[3]:[0]:[32]:[1.1.1.1]/88
                       172.31.20.20                                   0 65001 65002 i
 *>e                   172.31.10.10                                   0 65001 65002 i
-* e[3]:[0]:[32]:[172.31.40.40]/88
+
+Route Distinguisher: 172.31.40.40:10000
+* e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      172.31.20.20                                   0 65001 65003 i
+*>e                   172.31.10.10                                   0 65001 65003 i
+* e[3]:[0]:[32]:[2.2.2.2]/88
                       172.31.20.20                                   0 65001 65003 i
 *>e                   172.31.10.10                                   0 65001 65003 i
 
 Route Distinguisher: 172.31.50.50:10000    (L2VNI 10000)
-*>l[3]:[0]:[32]:[172.31.50.50]/88
-                      172.31.50.50                      100      32768 i
+*>e[2]:[0]:[0]:[48]:[0050.7966.6807]:[0]:[0.0.0.0]/216
+                      172.31.10.10                                   0 65001 65003 i
+*>l[2]:[0]:[0]:[48]:[0050.7966.6808]:[0]:[0.0.0.0]/216
+                      3.3.3.3                           100      32768 i
+*>l[2]:[0]:[0]:[48]:[0050.7966.6809]:[0]:[0.0.0.0]/216
+                      3.3.3.3                           100      32768 i
+*>e[3]:[0]:[32]:[1.1.1.1]/88
+                      172.31.10.10                                   0 65001 65002 i
+*>e[3]:[0]:[32]:[2.2.2.2]/88
+                      172.31.10.10                                   0 65001 65003 i
+*>l[3]:[0]:[32]:[3.3.3.3]/88
+                      3.3.3.3                           100      32768 i
+					  
+LEAF3# sh nve peers 
+Interface Peer-IP                                 State LearnType Uptime   Router-Mac       
+--------- --------------------------------------  ----- --------- -------- -----------------
+nve1      1.1.1.1                                 Up    CP        00:34:22 n/a              
+nve1      2.2.2.2                                 Up    CP        00:43:43 n/a              
+nve1      172.31.10.10                            Up    CP        00:42:01 n/a    
 ```
 </details>
 
-Вывод команд свидетельствует, что все коммутаторы установили соседство по L2VPN EVPN и обмениваются маршрутной информацией. Также видим туннель VxLAN (NVE Peering) между LEAF1 и LEAF2. На LEAF3 в момент работы всего сетевого оборудования туннеля нет, так его установили два других коммутатора.
+Вывод команд свидетельствует, что все коммутаторы установили соседство по L2VPN EVPN и обмениваются маршрутной информацией. Также видим туннель VxLAN (NVE Peering) между LEAF1, LEAF2 и LEAF3.

@@ -77,6 +77,7 @@ router bgp 65001
   template peer LEAF-L2VPN
     update-source loopback0
     disable-connected-check
+    ebgp-multihop 3
     address-family l2vpn evpn
       disable-peer-as-check
       send-community
@@ -128,6 +129,7 @@ router bgp 65001
   template peer LEAF-L2VPN
     update-source loopback0
     disable-connected-check
+    ebgp-multihop 3
     address-family l2vpn evpn
       disable-peer-as-check
       send-community

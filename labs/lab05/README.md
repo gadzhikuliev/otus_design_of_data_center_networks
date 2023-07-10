@@ -59,6 +59,9 @@ nv overlay evpn
 feature bgp
 feature bfd
 
+route-map NEXT-HOP-UNCH permit 10
+  set ip next-hop unchanged
+
 router bgp 65001
   router-id 172.31.10.10
   bestpath as-path multipath-relax
@@ -66,6 +69,7 @@ router bgp 65001
     network 172.31.10.10/32
     maximum-paths 4
   address-family l2vpn evpn
+    nexthop route-map NEXT-HOP-UNCH
     retain route-target all
   template peer LEAF-IPv4
     bfd
@@ -74,8 +78,10 @@ router bgp 65001
     update-source loopback0
     disable-connected-check
     address-family l2vpn evpn
+      disable-peer-as-check
       send-community
       send-community extended
+      route-map NEXT-HOP-UNCH out
   neighbor 10.0.0.1
     inherit peer LEAF-IPv4
     remote-as 65002
@@ -104,6 +110,9 @@ nv overlay evpn
 feature bgp
 feature bfd
 
+route-map NEXT-HOP-UNCH permit 10
+  set ip next-hop unchanged
+
 router bgp 65001
   router-id 172.31.20.20
   bestpath as-path multipath-relax
@@ -111,6 +120,7 @@ router bgp 65001
     network 172.31.20.20/32
     maximum-paths 4
   address-family l2vpn evpn
+    nexthop route-map NEXT-HOP-UNCH
     retain route-target all
   template peer LEAF-IPv4
     bfd
@@ -119,8 +129,10 @@ router bgp 65001
     update-source loopback0
     disable-connected-check
     address-family l2vpn evpn
+      disable-peer-as-check
       send-community
       send-community extended
+      route-map NEXT-HOP-UNCH out
   neighbor 10.0.0.5
     inherit peer LEAF-IPv4
     remote-as 65002

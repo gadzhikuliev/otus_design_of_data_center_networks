@@ -57,7 +57,6 @@
 ```
 nv overlay evpn
 feature bgp
-feature vn-segment-vlan-based
 feature bfd
 feature nv overlay
 
@@ -104,7 +103,6 @@ router bgp 65001
 ```
 nv overlay evpn
 feature bgp
-feature vn-segment-vlan-based
 feature bfd
 feature nv overlay
 

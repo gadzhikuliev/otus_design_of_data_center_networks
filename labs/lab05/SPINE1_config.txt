@@ -16,7 +16,6 @@ vdc SPINE1 id 1
 
 nv overlay evpn
 feature bgp
-feature vn-segment-vlan-based
 feature bfd
 feature nv overlay
 

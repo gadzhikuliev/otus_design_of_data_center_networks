@@ -32,7 +32,7 @@
 
 #### <u>Адреса интерфейсов Loopback 1, используемые в интерфейсах NVE:</u>
 
-|Device|Loopback 0|Subnet Mask|
+|Device|Loopback 1|Subnet Mask|
 |:-:|:-:|:-:|
 |LEAF1|10.10.10.10|255.255.255.255|
 |LEAF2|20.20.20.20|255.255.255.255|

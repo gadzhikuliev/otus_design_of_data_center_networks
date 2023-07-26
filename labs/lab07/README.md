@@ -40,7 +40,7 @@
 |LEAF2|10|172.16.1.0/24|
 |LEAF3|20|172.16.2.0/24|
 
-#### Адресация для Peer-Keeoalive Link
+#### Адресация для Peer-Keepalive Link
 
 |Device|Interface|IP Address|
 |:-:|:-:|:-:|

@@ -157,6 +157,32 @@ interface loopback1
   ip address 100.100.100.100/32 secondary
   ip router ospf UNDERLAY area 0.0.0.0
 ```
+#### <u>Настройка CE:</u>
+
+```
+feature interface-vlan
+feature lacp
+
+vlan 10
+  name CLIENT-1
+
+interface Vlan10
+  no shutdown
+  ip address 172.16.1.10/24
+
+interface port-channel100
+  description To LEAFS
+  switchport mode trunk
+
+interface Ethernet1/1
+  switchport mode trunk
+  channel-group 100 mode active
+
+interface Ethernet1/2
+  switchport mode trunk
+  channel-group 100 mode active
+```
+
 ### Проверка работособности vPC и общая проверка Overlay: таблица маршрутизации IP, таблица маршрутизации L2VPN, NVE Peers. Также посмотрим таблицу MAC-адресов и ARP-таблицу:
 
 <details>

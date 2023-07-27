@@ -532,5 +532,50 @@ r-Mac
 nve1      100.100.100.100                         Up    CP        00:53:37 0200.6464.6464
 ```
 </details>
+<details>
+<summary>Проверка на клиентах - CE и CLIENT-2</summary>
 
-Как видно из выводов команд, vPC-домен корректно работает. VTEP-коммутаторы обмениваются маршрутной информацией. VxLAN-туннели работают, видим MAC-адреса VTEP за интерфейсами NVE, также мы видим клиентские IP- и MAC-адреса в таблицах маршрутизации.
+```
+CE# sh ip int brief
+
+IP Interface Status for VRF "default"(1)
+Interface            IP Address      Interface Status
+Vlan10               172.16.1.10     protocol-up/link-up/admin-up
+CE#
+CE#
+CE# ping 172.16.2.10
+PING 172.16.2.10 (172.16.2.10): 56 data bytes
+64 bytes from 172.16.2.10: icmp_seq=0 ttl=61 time=85.886 ms
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=61 time=22.082 ms
+64 bytes from 172.16.2.10: icmp_seq=2 ttl=61 time=32.115 ms
+64 bytes from 172.16.2.10: icmp_seq=3 ttl=61 time=25.753 ms
+64 bytes from 172.16.2.10: icmp_seq=4 ttl=61 time=20.525 ms
+
+--- 172.16.2.10 ping statistics ---
+5 packets transmitted, 5 packets received, 0.00% packet loss
+round-trip min/avg/max = 20.525/37.272/85.886 ms
+
+------------------------------------------------------------------
+
+CLIENT-2> sh ip
+
+NAME        : CLIENT-2[1]
+IP/MASK     : 172.16.2.10/24
+GATEWAY     : 172.16.2.1
+DNS         :
+MAC         : 00:50:79:66:68:06
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+CLIENT-2> ping 172.16.1.10
+
+84 bytes from 172.16.1.10 icmp_seq=1 ttl=253 time=33.728 ms
+84 bytes from 172.16.1.10 icmp_seq=2 ttl=253 time=17.495 ms
+84 bytes from 172.16.1.10 icmp_seq=3 ttl=253 time=21.441 ms
+84 bytes from 172.16.1.10 icmp_seq=4 ttl=253 time=18.267 ms
+84 bytes from 172.16.1.10 icmp_seq=5 ttl=253 time=28.418 ms
+```
+</details>
+
+Как видно из выводов команд, vPC-домен корректно работает. VTEP-коммутаторы обмениваются маршрутной информацией. VxLAN-туннели работают, видим MAC-адреса VTEP за интерфейсами NVE, также мы видим клиентские IP- и MAC-адреса в таблицах маршрутизации. Клиенты CE и CLIENT-2 пингуют друг друга.

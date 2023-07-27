@@ -1,8 +1,7 @@
 
-
 !Command: show running-config
-!Running configuration last done at: Wed Jul 26 13:18:05 2023
-!Time: Wed Jul 26 13:18:06 2023
+!Running configuration last done at: Thu Jul 27 15:58:22 2023
+!Time: Thu Jul 27 15:58:22 2023
 
 version 9.3(10) Bios:version  
 hostname CE
@@ -28,6 +27,7 @@ rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
 rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
 rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
 
+ip route 0.0.0.0/0 172.16.1.1
 vlan 1,10
 vlan 10
   name CLIENT-1

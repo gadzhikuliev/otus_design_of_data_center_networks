@@ -163,6 +163,8 @@ interface loopback1
 feature interface-vlan
 feature lacp
 
+ip route 0.0.0.0/0 172.16.1.1
+
 vlan 10
   name CLIENT-1
 

@@ -6,3 +6,4 @@
 - [Lab05: VxLAN. EVPN L2](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab05)
 - [Lab06: VxLAN. EVPN L3](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab06)
 - [Lab07: VxLAN. vPC](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab07)
+- [Lab08: VxLAN. Оптимизация таблиц маршрутизации](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab08)

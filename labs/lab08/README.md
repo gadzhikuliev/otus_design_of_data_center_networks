@@ -1,7 +1,7 @@
 ## VxLAN. Оптимизация таблиц маршрутизации
 
 ### Цель:
-- Разобрать EVPN Route Type 5 и его применение
+- Реализовать передачу суммарных префиксов через EVPN Route Type 5
 
 ### Описание выполнения лабораторной работы:
 - Underlay и Overlay настроены, согласно [данной](https://github.com/gadzhikuliev/otus_design_of_data_center_networks/tree/main/labs/lab06) лабораторной работе

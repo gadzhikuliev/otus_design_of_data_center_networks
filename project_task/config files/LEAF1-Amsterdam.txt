@@ -41,6 +41,12 @@ vlan 30
 vlan 99
   vn-segment 990
 
+ip prefix-list EXT seq 5 permit 10.0.0.3/32 
+ip prefix-list EXT seq 10 permit 10.1.1.2/32 
+ip prefix-list EXT seq 15 permit 10.0.0.10/32 
+route-map EXTERNAL permit 10
+  match ip address prefix-list EXT 
+  match route-type external internal 
 vrf context PROD
   vni 990
   rd auto
@@ -52,6 +58,7 @@ vrf context PROD
     route-target export 65000:111
     route-target export 65000:111 evpn
 vrf context management
+
 
 interface Vlan1
 
@@ -252,6 +259,7 @@ line console
 line vty
 router ospf UNDERLAY
   router-id 10.0.0.5
+  redistribute bgp 65002 route-map EXTERNAL
 router bgp 65002
   router-id 10.0.0.5
   address-family ipv4 unicast

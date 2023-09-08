@@ -27,6 +27,7 @@ rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
 rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
 rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
 
+fabric forwarding anycast-gateway-mac 0000.1111.2222
 vlan 1,10,20,30,40,99
 vlan 10
   name 10-DataStorages
@@ -49,6 +50,10 @@ vrf context PROD
   address-family ipv4 unicast
     route-target both auto
     route-target both auto evpn
+    route-target import 65000:111
+    route-target import 65000:111 evpn
+    route-target export 65000:111
+    route-target export 65000:111 evpn
 vrf context management
 
 interface Vlan1
@@ -57,75 +62,106 @@ interface Vlan10
   no shutdown
   vrf member PROD
   ip address 172.16.10.1/24
+  fabric forwarding mode anycast-gateway
 
 interface Vlan11
+  fabric forwarding mode anycast-gateway
 
 interface Vlan12
+  fabric forwarding mode anycast-gateway
 
 interface Vlan13
+  fabric forwarding mode anycast-gateway
 
 interface Vlan14
+  fabric forwarding mode anycast-gateway
 
 interface Vlan15
+  fabric forwarding mode anycast-gateway
 
 interface Vlan16
+  fabric forwarding mode anycast-gateway
 
 interface Vlan17
+  fabric forwarding mode anycast-gateway
 
 interface Vlan18
+  fabric forwarding mode anycast-gateway
 
 interface Vlan19
+  fabric forwarding mode anycast-gateway
 
 interface Vlan20
   no shutdown
   vrf member PROD
   ip address 172.16.20.1/24
+  fabric forwarding mode anycast-gateway
 
 interface Vlan21
+  fabric forwarding mode anycast-gateway
 
 interface Vlan22
+  fabric forwarding mode anycast-gateway
 
 interface Vlan23
+  fabric forwarding mode anycast-gateway
 
 interface Vlan24
+  fabric forwarding mode anycast-gateway
 
 interface Vlan25
+  fabric forwarding mode anycast-gateway
 
 interface Vlan26
+  fabric forwarding mode anycast-gateway
 
 interface Vlan27
+  fabric forwarding mode anycast-gateway
 
 interface Vlan28
+  fabric forwarding mode anycast-gateway
 
 interface Vlan29
+  fabric forwarding mode anycast-gateway
 
 interface Vlan30
   no shutdown
   vrf member PROD
   ip address 172.16.30.1/24
+  fabric forwarding mode anycast-gateway
 
 interface Vlan31
+  fabric forwarding mode anycast-gateway
 
 interface Vlan32
+  fabric forwarding mode anycast-gateway
 
 interface Vlan33
+  fabric forwarding mode anycast-gateway
 
 interface Vlan34
+  fabric forwarding mode anycast-gateway
 
 interface Vlan35
+  fabric forwarding mode anycast-gateway
 
 interface Vlan36
+  fabric forwarding mode anycast-gateway
 
 interface Vlan37
+  fabric forwarding mode anycast-gateway
 
 interface Vlan38
+  fabric forwarding mode anycast-gateway
 
 interface Vlan39
+  fabric forwarding mode anycast-gateway
 
 interface Vlan40
   no shutdown
   vrf member PROD
   ip address 172.16.40.1/24
+  fabric forwarding mode anycast-gateway
 
 interface Vlan99
   description Inter VXLAN Routing
@@ -325,16 +361,24 @@ evpn
   vni 1010 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111
   vni 1020 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111
   vni 1030 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111
   vni 1040 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111

@@ -50,7 +50,9 @@ vrf context PROD
     route-target both auto
     route-target both auto evpn
     route-target import 65000:111
+    route-target import 65000:111 evpn
     route-target export 65000:111
+    route-target export 65000:111 evpn
 vrf context management
 
 interface Vlan1
@@ -325,6 +327,7 @@ router bgp 65001
     remote-as 65002
     update-source loopback0
     ebgp-multihop 2
+    address-family ipv4 unicast
     address-family l2vpn evpn
       allowas-in 3
       send-community

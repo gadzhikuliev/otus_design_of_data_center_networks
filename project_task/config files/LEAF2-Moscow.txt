@@ -44,12 +44,11 @@ vlan 40
 vlan 99
   vn-segment 990
 
-ip prefix-list EXT seq 5 permit 10.0.0.5/32 
-ip prefix-list EXT seq 10 permit 10.2.2.1/32 
-ip prefix-list EXT seq 15 permit 10.0.0.10/32 
-route-map EXTERNAL permit 10
-  match ip address prefix-list EXT 
-  match route-type external internal 
+ip prefix-list eBGP2OSPF seq 5 permit 10.0.0.5/32 
+ip prefix-list eBGP2OSPF seq 10 permit 10.2.2.1/32 
+route-map eBGP2OSPF permit 10
+  match ip address prefix-list iBGP2OSPF eBGP2OSPF 
+  match route-type external 
 vrf context PROD
   vni 990
   rd auto
@@ -196,6 +195,7 @@ interface Ethernet1/1
   mtu 9216
   medium p2p
   ip unnumbered loopback0
+  ip ospf network point-to-point
   ip router ospf UNDERLAY area 0.0.0.0
   no shutdown
 
@@ -354,11 +354,13 @@ line console
 line vty
 router ospf UNDERLAY
   router-id 10.0.0.3
-  redistribute bgp 65001 route-map EXTERNAL
+  redistribute bgp 65001 route-map eBGP2OSPF
 router bgp 65001
   router-id 10.0.0.3
   address-family ipv4 unicast
+    network 10.0.0.2/32
     network 10.0.0.3/32
+    network 10.1.1.1/32
     network 10.1.1.2/32
   address-family l2vpn evpn
     maximum-paths ibgp 2
@@ -367,7 +369,6 @@ router bgp 65001
     remote-as 65002
     update-source loopback0
     ebgp-multihop 2
-    address-family ipv4 unicast
     address-family l2vpn evpn
       allowas-in 3
       send-community

@@ -47,6 +47,10 @@ vrf context PROD
   address-family ipv4 unicast
     route-target both auto
     route-target both auto evpn
+    route-target import 65000:111
+    route-target import 65000:111 evpn
+    route-target export 65000:111
+    route-target export 65000:111 evpn
 vrf context management
 
 interface Vlan1
@@ -93,6 +97,7 @@ interface Ethernet1/1
   mtu 9216
   medium p2p
   ip unnumbered loopback0
+  ip ospf network point-to-point
   ip router ospf UNDERLAY area 0.0.0.0
   no shutdown
 
@@ -261,12 +266,18 @@ evpn
   vni 2040 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111
   vni 2050 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111
   vni 2060 l2
     rd auto
     route-target import auto
+    route-target import 65000:111
     route-target export auto
+    route-target export 65000:111

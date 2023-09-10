@@ -45,6 +45,8 @@ ip prefix-list eBGP2OSPF seq 5 permit 10.0.0.3/32
 ip prefix-list eBGP2OSPF seq 10 permit 10.1.1.2/32 
 ip prefix-list eBGP2OSPF seq 15 permit 10.0.0.2/32 
 ip prefix-list eBGP2OSPF seq 20 permit 10.1.1.1/32 
+route-map NEXT-HOP-UNCH permit 10
+  set ip next-hop unchanged
 route-map eBGP2OSPF permit 10
   match ip address prefix-list eBGP2OSPF 
   match route-type external 
@@ -271,6 +273,7 @@ router bgp 65002
     network 10.2.2.2/32
   address-family l2vpn evpn
     maximum-paths ibgp 2
+    nexthop route-map NEXT-HOP-UNCH
     retain route-target all
   template peer BGW
     remote-as 65001

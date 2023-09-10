@@ -43,6 +43,8 @@ vlan 99
 
 ip prefix-list eBGP2OSPF seq 5 permit 10.0.0.3/32 
 ip prefix-list eBGP2OSPF seq 10 permit 10.1.1.2/32 
+ip prefix-list eBGP2OSPF seq 15 permit 10.0.0.2/32 
+ip prefix-list eBGP2OSPF seq 20 permit 10.1.1.1/32 
 route-map eBGP2OSPF permit 10
   match ip address prefix-list eBGP2OSPF 
   match route-type external 
@@ -273,7 +275,7 @@ router bgp 65002
   template peer BGW
     remote-as 65001
     update-source loopback0
-    ebgp-multihop 2
+    ebgp-multihop 5
     address-family l2vpn evpn
       allowas-in 3
       send-community

@@ -61,6 +61,8 @@ vrf context PROD
     route-target export 65000:111
     route-target export 65000:111 evpn
 vrf context management
+hardware access-list tcam region racl 512
+hardware access-list tcam region arp-ether 256 double-wide
 
 
 interface Vlan1
@@ -95,10 +97,13 @@ interface nve1
   source-interface loopback1
   member vni 990 associate-vrf
   member vni 2010
+    suppress-arp
     ingress-replication protocol bgp
   member vni 2020
+    suppress-arp
     ingress-replication protocol bgp
   member vni 2030
+    suppress-arp
     ingress-replication protocol bgp
 
 interface Ethernet1/1

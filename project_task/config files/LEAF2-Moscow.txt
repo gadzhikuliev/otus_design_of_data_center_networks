@@ -15,6 +15,7 @@ feature bgp
 feature interface-vlan
 feature vn-segment-vlan-based
 feature nv overlay
+evpn multisite border-gateway 1
 
 no password strength-check
 username admin password 5 $5$NAOCOL$Y8QimGNeWZTy4YRFRVg.vOGrHsZdxNa7saRAhZZPwrB  role network-admin
@@ -185,6 +186,7 @@ interface nve1
   no shutdown
   host-reachability protocol bgp
   source-interface loopback1
+  multisite border-gateway interface loopback2
   member vni 990 associate-vrf
   member vni 1010
     suppress-arp
@@ -208,6 +210,7 @@ interface Ethernet1/1
   ip ospf network point-to-point
   ip router ospf UNDERLAY area 0.0.0.0
   no shutdown
+  evpn multisite fabric-tracking
 
 interface Ethernet1/2
   description Link to DCI
@@ -215,6 +218,7 @@ interface Ethernet1/2
   mtu 9216
   ip address 195.11.20.2/30
   no shutdown
+  evpn multisite dci-tracking
 
 interface Ethernet1/3
   description Data Storages
@@ -358,6 +362,11 @@ interface loopback0
 interface loopback1
   ip address 10.1.1.2/32
   ip router ospf UNDERLAY area 0.0.0.0
+
+interface loopback2
+  description Multi-Site Interface
+  ip address 1.1.1.1/32
+  ip router ospf UNDERLAY area 0.0.0.0
 icam monitor scale
 
 line console
@@ -368,6 +377,7 @@ router ospf UNDERLAY
 router bgp 65001
   router-id 10.0.0.3
   address-family ipv4 unicast
+    network 1.1.1.1/32
     network 10.0.0.2/32
     network 10.0.0.3/32
     network 10.1.1.1/32
@@ -380,10 +390,12 @@ router bgp 65001
     remote-as 65002
     update-source loopback0
     ebgp-multihop 5
+    peer-type fabric-external
     address-family l2vpn evpn
       allowas-in 3
       send-community
       send-community extended
+      rewrite-evpn-rt-asn
   template peer SPINE-L2VPN
     remote-as 65001
     update-source loopback0

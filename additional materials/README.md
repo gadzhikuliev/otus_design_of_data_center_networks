@@ -13,3 +13,4 @@
 13. [Huawei: Configure a Tunnel Gateway in Your Data Center](https://support.huaweicloud.com/intl/en-us/qs-esw/esw_qs_0007.html)
 14. [VxLAN-фабрика. Multisite](https://habr.com/ru/companies/otus/articles/551854/)
 15. [VXLAN on NX-OS](https://www.youtube.com/playlist?list=PLhDYfiUuFcxP3coDOUGPe7feontvx6SIl)
+16. [Обзор технологии EVPN](https://www.youtube.com/watch?v=BhEcEGAlfvA)

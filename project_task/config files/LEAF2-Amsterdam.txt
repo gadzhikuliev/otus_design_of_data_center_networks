@@ -98,7 +98,7 @@ interface nve1
     ingress-replication protocol bgp
 
 interface Ethernet1/1
-  description Link to SPINE2
+  description Link to SPINE-Amsterdam
   no switchport
   mtu 9216
   medium p2p

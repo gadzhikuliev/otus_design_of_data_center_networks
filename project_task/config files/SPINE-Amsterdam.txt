@@ -29,7 +29,7 @@ vlan 1
 vrf context management
 
 interface Ethernet1/1
-  description Link to LEAF3
+  description Link to LEAF1-Amsterdam
   no switchport
   mtu 9216
   medium p2p
@@ -39,7 +39,7 @@ interface Ethernet1/1
   no shutdown
 
 interface Ethernet1/2
-  description Link to LEAF4
+  description Link to LEAF2-Amsterdam
   no switchport
   mtu 9216
   medium p2p

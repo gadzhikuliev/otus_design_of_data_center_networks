@@ -14,3 +14,7 @@
 14. [VxLAN-фабрика. Multisite](https://habr.com/ru/companies/otus/articles/551854/)
 15. [VXLAN on NX-OS](https://www.youtube.com/playlist?list=PLhDYfiUuFcxP3coDOUGPe7feontvx6SIl)
 16. [Обзор технологии EVPN](https://www.youtube.com/watch?v=BhEcEGAlfvA)
+17. [Что такое EVPN-VXLAN?](https://www.juniper.net/ru/ru/research-topics/what-is-evpn-vxlan.html)
+18. [Что такое EVPN/VXLAN](https://habr.com/ru/articles/352564/)
+19. [Что такое VXLAN и как работает для сети ЦОД?](https://community.fs.com/ru/blog/what-is-vxlan-and-how-works-for-datacenter-network.html)
+20. [Что такое EVPN-VXLAN?](https://community.fs.com/ru/blog/what-is-evpn-vxlan.html)

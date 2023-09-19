@@ -20,3 +20,4 @@
 20. [Что такое EVPN-VXLAN?](https://community.fs.com/ru/blog/what-is-evpn-vxlan.html)
 21. [IS-IS для тех, кто понимает OSPF](https://petruenin.livejournal.com/tag/is-is)
 22. [Сети для самых матёрых. Микровыпуск №7. EVPN](https://habr.com/ru/articles/316792/)
+23. [IBGP as an IGP](https://packetlife.net/blog/2011/mar/14/ibgp-igp/)

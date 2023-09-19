@@ -21,3 +21,4 @@
 21. [IS-IS для тех, кто понимает OSPF](https://petruenin.livejournal.com/tag/is-is)
 22. [Сети для самых матёрых. Микровыпуск №7. EVPN](https://habr.com/ru/articles/316792/)
 23. [IBGP as an IGP](https://packetlife.net/blog/2011/mar/14/ibgp-igp/)
+24. [Объединение проектов в разных дата-центрах](https://habr.com/ru/companies/selectel/articles/436648/)

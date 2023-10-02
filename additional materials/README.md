@@ -23,3 +23,5 @@
 23. [IBGP as an IGP](https://packetlife.net/blog/2011/mar/14/ibgp-igp/)
 24. [Объединение проектов в разных дата-центрах](https://habr.com/ru/companies/selectel/articles/436648/)
 25. [VMware VXLAN Explained: Advantages and Implementation](https://www.nakivo.com/blog/vxlan-vmware-basics/)
+26. [BGP EVPN Between NSX And VyOS – Part 1](https://rutgerblom.com/2023/08/13/bgp-evpn-between-nsx-and-vyos-part-1/)
+27. [BGP EVPN Between NSX And VyOS – Part 2](https://rutgerblom.com/2023/08/15/bgp-evpn-between-nsx-and-vyos-part-2/)

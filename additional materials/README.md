@@ -25,3 +25,4 @@
 25. [VMware VXLAN Explained: Advantages and Implementation](https://www.nakivo.com/blog/vxlan-vmware-basics/)
 26. [BGP EVPN Between NSX And VyOS – Part 1](https://rutgerblom.com/2023/08/13/bgp-evpn-between-nsx-and-vyos-part-1/)
 27. [BGP EVPN Between NSX And VyOS – Part 2](https://rutgerblom.com/2023/08/15/bgp-evpn-between-nsx-and-vyos-part-2/)
+28. [VXLAN, небольшой обзор](http://www.anticisco.ru/blogs/2017/02/vxlan/)
